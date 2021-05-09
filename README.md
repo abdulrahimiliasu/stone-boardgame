@@ -1,6 +1,6 @@
-#Stone Board Game
+# Stone Board Game
 
-##Description
+## Description
 Consider the game board shown in the image. Initially, a piece of stone is placed on the top left square of the board. 
 The goal of the puzzle game is to move the stone to the bottom right square marked with the `*` symbol. Initially,
 the stone can be moved horizontally or vertically.
@@ -8,7 +8,7 @@ The numbers in the squares specify the number of squares that the stone must ste
 However, when the stone lands on a framed square, it can be moved only diagonally, until it lands on an unframed square again. 
 When the stone lands on an unframed square again, it must be moved horizontally or vertically again.
 
-##Usage
+## Usage
 
 
-##Copyrights
+## Copyrights

@@ -1,0 +1,25 @@
+.square {
+    -fx-border-style: solid;
+}
+.square-diagonal {
+    -fx-border-color: red;
+}
+.square-finish {
+    -fx-border-color: green;
+}
+
+.selected {
+    -fx-background-color: silver;
+}
+
+.square-diagonal, .square-finish{
+    -fx-border-width: 2;
+}
+
+.selectable {
+    -fx-border-width: 5;
+}
+
+.square:hover, .square-diagonal:hover {
+    -fx-background-color: ghostwhite;
+}
