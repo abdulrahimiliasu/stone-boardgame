@@ -137,7 +137,9 @@ public class GameController {
                     hideSelectablePositions();
                     selectionPhase = selectionPhase.alter();
                     addNewStoneAt(position);
-                    playerSteps ++;
+                    clearAndAddSelectablePositionsAt(position);
+                    if(!model.isGameSolved())
+                        playerSteps ++;
                     playerStepsLabel.setText(String.valueOf(playerSteps));
                 }
             }
@@ -149,6 +151,11 @@ public class GameController {
         hideSelectablePositions();
         setSelectablePositions();
         showSelectablePositions();
+    }
+
+    void clearAndAddSelectablePositionsAt(Position position){
+        selectablePositions.clear();
+        selectablePositions.add(position);
     }
 
     private void selectPosition(Position position) {
@@ -201,11 +208,10 @@ public class GameController {
 
     public void resetGame(){
         removeStone();
-        selectablePositions.clear();
-        selectablePositions.add(startingPosition);
+        clearAndAddSelectablePositionsAt(startingPosition);
+        addNewStoneAt(startingPosition);
         resetTextLabels();
         model.setGameIsSolved(false);
-        addNewStoneAt(startingPosition);
         playerSteps = 0;
     }
 
