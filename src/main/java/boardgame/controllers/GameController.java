@@ -32,6 +32,7 @@ public class GameController {
     private Position selected;
     List<Position> selectablePositions = new ArrayList<>();
     GameModel model = new GameModel();
+    Position startingPosition = new Position(0,0);
 
     @FXML
     private GridPane board;
@@ -39,7 +40,7 @@ public class GameController {
     @FXML
     void initialize(){
         createBoard();
-        selectablePositions.add(new Position(0,0));
+        selectablePositions.add(startingPosition);
     }
 
     private void createBoard(){
@@ -52,7 +53,7 @@ public class GameController {
                 board.add(square,i,j);
             }
         }
-        addNewStone(new Position(0,0));
+        addNewStoneAt(startingPosition);
     }
 
     private StackPane createSquare(String cssClass) {
@@ -62,7 +63,7 @@ public class GameController {
         return square;
     }
 
-    private void addNewStone(Position position){
+    private void addNewStoneAt(Position position){
         removeStone();
         var newStone = createStone();
         GridPane.setHalignment(newStone, HPos.CENTER);
@@ -70,14 +71,14 @@ public class GameController {
         board.add(newStone,position.col(),position.row());
     }
 
+    private void removeStone(){
+        board.getChildren().removeIf(child -> child instanceof Circle);
+    }
+
     private Circle createStone(){
         Circle stone = new Circle(10);
         stone.setFill(Color.rgb(0,0,0));
         return stone;
-    }
-
-    private void removeStone(){
-        board.getChildren().removeIf(child -> child instanceof Circle);
     }
 
     @FXML
@@ -90,7 +91,6 @@ public class GameController {
     }
 
     private void handleClickOnSquare(Position position) {
-        System.out.println(selectionPhase);
         switch (selectionPhase) {
             case SELECT_FROM -> {
                 if (selectablePositions.contains(position)) {
@@ -103,7 +103,7 @@ public class GameController {
                     deselectSelectedPosition();
                     hideSelectablePositions();
                     selectionPhase = selectionPhase.alter();
-                    addNewStone(position);
+                    addNewStoneAt(position);
                 }
             }
         }

@@ -42,7 +42,7 @@
       <Button layoutX="596.0" layoutY="603.0" mnemonicParsing="false" text="Give Up" />
       <HBox alignment="BOTTOM_LEFT" layoutX="57.0" layoutY="605.0" prefHeight="23.0" prefWidth="71.0">
          <children>
-            <Label text="Score:">
+            <Label text="Steps:">
                <font>
                   <Font size="18.0" />
                </font>
