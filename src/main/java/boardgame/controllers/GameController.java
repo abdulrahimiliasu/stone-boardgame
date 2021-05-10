@@ -2,19 +2,30 @@ package boardgame.controllers;
 
 import boardgame.model.GameModel;
 import boardgame.model.Position;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameController {
+
+    String playerName;
+    private int playerSteps = 0;
 
     private enum SelectionPhase {
         SELECT_FROM,
@@ -38,9 +49,26 @@ public class GameController {
     private GridPane board;
 
     @FXML
+    private Button giveUpButton;
+
+    @FXML
+    private Label playerNameLabel;
+
+    @FXML
+    private Label playerStepsLabel;
+
+    @FXML
+    private Label gameIsSolvedLabel;
+
+    @FXML
     void initialize(){
         createBoard();
         selectablePositions.add(startingPosition);
+    }
+
+    public void initData(String name){
+        this.playerName = name;
+        playerNameLabel.setText("Current User: " +this.playerName);
     }
 
     private void createBoard(){
@@ -100,10 +128,17 @@ public class GameController {
             }
             case SELECT_TO -> {
                 if (selectablePositions.contains(position)) {
+                    if (model.isPlayerFinished(position)){
+                        giveUpButton.setText("Save");
+                        model.setGameIsSolved(true);
+                        gameIsSolvedLabel.setText("Hurray! You solved the game.");
+                    }
                     deselectSelectedPosition();
                     hideSelectablePositions();
                     selectionPhase = selectionPhase.alter();
                     addNewStoneAt(position);
+                    playerSteps ++;
+                    playerStepsLabel.setText(String.valueOf(playerSteps));
                 }
             }
         }
@@ -162,6 +197,34 @@ public class GameController {
             }
         }
         throw new AssertionError();
+    }
+
+    public void resetGame(){
+        removeStone();
+        selectablePositions.clear();
+        selectablePositions.add(startingPosition);
+        resetTextLabels();
+        model.setGameIsSolved(false);
+        addNewStoneAt(startingPosition);
+        playerSteps = 0;
+    }
+
+    void resetTextLabels(){
+        giveUpButton.setText("Give Up");
+        gameIsSolvedLabel.setText("");
+        playerStepsLabel.setText("0");
+    }
+
+    public void showHighScores(ActionEvent actionEvent) throws IOException {
+        if (model.isGameSolved()){
+            System.out.println("Saving Data");
+        }
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/highscores.fxml"));
+        Parent root = fxmlLoader.load();
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        stage.show();
     }
 
 }

@@ -21,14 +21,14 @@ public class LaunchController {
 
     public void startGame(ActionEvent actionEvent) throws IOException {
         if (playerNameTextfield.getText().isEmpty()) {
-            errorLabel.setText("* player name cannot be empty!");
+            errorLabel.setText("*player name cannot be empty!");
         } else {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/game.fxml"));
             Parent root = fxmlLoader.load();
-            System.out.println(playerNameTextfield.getText());
-            //fxmlLoader.<GameController>getController().initdata(playerNameTextfield.getText());
+            fxmlLoader.<GameController>getController().initData(playerNameTextfield.getText());
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
+            stage.setResizable(false);
             stage.show();
         }
 

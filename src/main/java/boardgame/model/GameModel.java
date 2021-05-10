@@ -8,6 +8,8 @@ public class GameModel {
 
     public GameModel(){}
 
+    private boolean gameIsSolved;
+
     public int getSquareMovements(Position squarePosition){
             int[][] movements = {
                     {4,2,2,4,4,3,4,3},
@@ -62,4 +64,15 @@ public class GameModel {
         return verticalHorizontalPositions;
     }
 
+    public boolean isPlayerFinished(Position position){
+        return position.row() == 7 && position.col() == 7;
+    }
+
+    public boolean isGameSolved(){
+        return gameIsSolved;
+    }
+
+    public void setGameIsSolved(boolean gameIsSolved) {
+        this.gameIsSolved = gameIsSolved;
+    }
 }

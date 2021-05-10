@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="583.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boardgame.controllers.HighScoresController">
+   <children>
+      <Button layoutX="240.0" layoutY="494.0" mnemonicParsing="false" onAction="#showMainMenu" prefHeight="41.0" prefWidth="103.0" text="Main Menu" />
+      <TableView layoutX="40.0" layoutY="70.0" prefHeight="409.0" prefWidth="503.0">
+        <columns>
+          <TableColumn maxWidth="150.0" prefWidth="150.0" resizable="false" text="Player" />
+          <TableColumn maxWidth="75.0" prefWidth="75.0" text="Steps" />
+            <TableColumn maxWidth="75.0" prefWidth="75.0" text="Duration" />
+            <TableColumn maxWidth="75.0" prefWidth="75.0" text="Score" />
+            <TableColumn maxWidth="130.0" prefWidth="130.0" text="Date" />
+        </columns>
+      </TableView>
+      <Label layoutX="197.0" layoutY="22.0" prefHeight="34.0" prefWidth="190.0" text="Top Ten Highsocres">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>
