@@ -11,6 +11,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+import org.tinylog.Logger;
+
 public class LaunchController {
 
     @FXML
@@ -30,6 +32,7 @@ public class LaunchController {
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.show();
+            Logger.info("Player name is set to {}, Loading Game.", playerNameTextfield.getText());
         }
 
     }

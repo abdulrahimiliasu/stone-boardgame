@@ -61,7 +61,7 @@
             <groupId>org.tinylog</groupId>
             <artifactId>tinylog-api</artifactId>
             <version>${tinylog.version}</version>
-            <scope>runtime</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.tinylog</groupId>

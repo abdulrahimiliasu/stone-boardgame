@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.tinylog.Logger;
 
 import java.io.IOException;
 
@@ -19,6 +20,7 @@ public class HighScoresController {
         stage.setScene(new Scene(root));
         stage.setResizable(false);
         stage.show();
+        Logger.info("Clicked on Main Menu button");
     }
 
 }

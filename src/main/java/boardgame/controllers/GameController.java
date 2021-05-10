@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.tinylog.Logger;
+
 public class GameController {
 
     String playerName;
@@ -69,6 +71,7 @@ public class GameController {
     public void initData(String name){
         this.playerName = name;
         playerNameLabel.setText("Current User: " +this.playerName);
+        Logger.debug("Game Loaded Successfully");
     }
 
     private void createBoard(){
@@ -115,6 +118,7 @@ public class GameController {
         var row = GridPane.getRowIndex(square);
         var col = GridPane.getColumnIndex(square);
         var position = new Position(row, col);
+        Logger.debug("Clicked on square ({}, {})", position.row(), position.col());
         handleClickOnSquare(position);
     }
 
@@ -132,14 +136,18 @@ public class GameController {
                         giveUpButton.setText("Save");
                         model.setGameIsSolved(true);
                         gameIsSolvedLabel.setText("Hurray! You solved the game.");
+                        Logger.debug("Game Solved");
                     }
                     deselectSelectedPosition();
                     hideSelectablePositions();
                     selectionPhase = selectionPhase.alter();
                     addNewStoneAt(position);
+                    Logger.debug("Stone moved to ({}, {})", position.row(), position.col());
                     clearAndAddSelectablePositionsAt(position);
-                    if(!model.isGameSolved())
+                    if(!model.isGameSolved()){
                         playerSteps ++;
+                        Logger.info("Player Steps: {}",playerSteps);
+                    }
                     playerStepsLabel.setText(String.valueOf(playerSteps));
                 }
             }
@@ -203,6 +211,7 @@ public class GameController {
                 return (StackPane) child;
             }
         }
+        Logger.error("Cannot get square on board (Square out of range)");
         throw new AssertionError();
     }
 
@@ -213,6 +222,7 @@ public class GameController {
         resetTextLabels();
         model.setGameIsSolved(false);
         playerSteps = 0;
+        Logger.debug("Game Reset");
     }
 
     void resetTextLabels(){
@@ -222,9 +232,7 @@ public class GameController {
     }
 
     public void showHighScores(ActionEvent actionEvent) throws IOException {
-        if (model.isGameSolved()){
-            System.out.println("Saving Data");
-        }
+        if (model.isGameSolved()){ Logger.debug("Saving Player Data"); } else {Logger.debug("PLayer gave up");}
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/highscores.fxml"));
         Parent root = fxmlLoader.load();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
