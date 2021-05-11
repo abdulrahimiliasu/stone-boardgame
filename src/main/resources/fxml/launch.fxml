@@ -8,13 +8,13 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boardgame.controllers.LaunchController">
    <children>
-      <Label fx:id="errorLabel" layoutX="212.0" layoutY="232.0" prefHeight="17.0" prefWidth="190.0" textFill="#e90c0c" />
-      <Label layoutX="129.0" layoutY="91.0" text="Stone Board Game" textFill="#ad7676">
+      <Label fx:id="errorLabel" layoutX="182.0" layoutY="192.0" prefHeight="17.0" prefWidth="238.0" textFill="#e90c0c" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="72.0" layoutY="87.0" prefHeight="72.0" prefWidth="457.0" text="Stone Board Game" textAlignment="CENTER" textFill="#ad7676">
          <font>
-            <Font size="45.0" />
+            <Font size="50.0" />
          </font>
       </Label>
-      <Button fx:id="startButton" layoutX="248.0" layoutY="283.0" mnemonicParsing="false" onAction="#startGame" prefHeight="56.0" prefWidth="118.0" text="Start" />
-      <TextField fx:id="playerNameTextfield" layoutX="166.0" layoutY="187.0" prefHeight="26.0" prefWidth="282.0" promptText="Enter a player name" />
+      <Button fx:id="startButton" layoutX="234.0" layoutY="291.0" mnemonicParsing="false" onAction="#startGame" prefHeight="56.0" prefWidth="135.0" text="Start" />
+      <TextField fx:id="playerNameTextfield" layoutX="182.0" layoutY="219.0" prefHeight="26.0" prefWidth="238.0" promptText="Enter a player name" />
    </children>
 </Pane>

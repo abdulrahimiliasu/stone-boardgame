@@ -1,5 +1,7 @@
 package boardgame.controllers;
 
+import boardgame.model.Game;
+import boardgame.model.GameDao;
 import boardgame.model.GameModel;
 import boardgame.model.Position;
 import javafx.event.ActionEvent;
@@ -19,15 +21,23 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.tinylog.Logger;
 
 public class GameController {
 
     String playerName;
     private int playerSteps = 0;
+    LocalTime startTime;
+    LocalTime finishedTime;
+    LocalDate date = LocalDate.now();
 
     private enum SelectionPhase {
         SELECT_FROM,
@@ -66,12 +76,13 @@ public class GameController {
     void initialize(){
         createBoard();
         selectablePositions.add(startingPosition);
+        startTime = LocalTime.now();
+        Logger.debug("GAME STARTED AT : {}", startTime);
     }
 
     public void initData(String name){
         this.playerName = name;
         playerNameLabel.setText("Current User: " +this.playerName);
-        Logger.debug("Game Loaded Successfully");
     }
 
     private void createBoard(){
@@ -132,22 +143,14 @@ public class GameController {
             }
             case SELECT_TO -> {
                 if (selectablePositions.contains(position)) {
-                    if (model.isPlayerFinished(position)){
-                        giveUpButton.setText("Save");
-                        model.setGameIsSolved(true);
-                        gameIsSolvedLabel.setText("Hurray! You solved the game.");
-                        Logger.debug("Game Solved");
-                    }
+                    if (model.isPlayerFinished(position)) {playerFinished();}
                     deselectSelectedPosition();
                     hideSelectablePositions();
                     selectionPhase = selectionPhase.alter();
                     addNewStoneAt(position);
-                    Logger.debug("Stone moved to ({}, {})", position.row(), position.col());
                     clearAndAddSelectablePositionsAt(position);
-                    if(!model.isGameSolved()){
-                        playerSteps ++;
-                        Logger.info("Player Steps: {}",playerSteps);
-                    }
+                    Logger.debug("Stone moved to ({}, {}), Player Steps: {}", position.row(), position.col(), playerSteps);
+                    if(model.isGameSolved()){Logger.debug("GAME SOLVED AT : {}", finishedTime);} else {playerSteps ++;}
                     playerStepsLabel.setText(String.valueOf(playerSteps));
                 }
             }
@@ -159,6 +162,14 @@ public class GameController {
         hideSelectablePositions();
         setSelectablePositions();
         showSelectablePositions();
+    }
+
+    void playerFinished(){
+        playerSteps ++;
+        giveUpButton.setText("Save");
+        model.setGameIsSolved(true);
+        gameIsSolvedLabel.setText("Hurray! You solved the game.");
+        finishedTime = LocalTime.now();
     }
 
     void clearAndAddSelectablePositionsAt(Position position){
@@ -222,7 +233,7 @@ public class GameController {
         resetTextLabels();
         model.setGameIsSolved(false);
         playerSteps = 0;
-        Logger.debug("Game Reset");
+        Logger.debug("GAME RESET");
     }
 
     void resetTextLabels(){
@@ -232,13 +243,39 @@ public class GameController {
     }
 
     public void showHighScores(ActionEvent actionEvent) throws IOException {
-        if (model.isGameSolved()){ Logger.debug("Saving Player Data"); } else {Logger.debug("PLayer gave up");}
+        if (model.isGameSolved()){ Logger.debug("Saving Player Data"); } else {
+            finishedTime = LocalTime.now();
+            Logger.debug("GIVE UP AT : {}", finishedTime);
+        }
+
+        Jdbi jdbi = Jdbi.create("jdbc:h2:mem:test");
+        jdbi.installPlugin(new SqlObjectPlugin());
+
+        List<Game> gameList = jdbi.withExtension(GameDao.class, dao -> {
+            dao.createTable();
+            dao.insert(getGame());
+            return dao.getTopTenGames();
+        });
+        gameList.forEach(System.out::println);
+
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/highscores.fxml"));
         Parent root = fxmlLoader.load();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.setResizable(false);
         stage.show();
+    }
+
+    private Game getGame(){
+        return Game.builder()
+                .id(0)
+                .duration((int) startTime.until(finishedTime, ChronoUnit.SECONDS))
+                .playerName(playerName)
+                .date(date)
+                .playerScore(((float) playerSteps / (float) startTime.until(finishedTime, ChronoUnit.SECONDS)) * 100)
+                .steps(playerSteps)
+                .outcome(model.isGameSolved() ? Game.Outcomes.SOLVED : Game.Outcomes.GIVEN_UP)
+                .build();
     }
 
 }

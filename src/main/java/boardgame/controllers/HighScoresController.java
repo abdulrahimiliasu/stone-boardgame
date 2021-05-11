@@ -1,17 +1,49 @@
 package boardgame.controllers;
 
+import boardgame.model.Game;
+import boardgame.model.GameDao;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.tinylog.Logger;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
 
 public class HighScoresController {
 
+    @FXML
+    private TableView<Game> topTenTable;
+
+    @FXML
+    private TableColumn<Game, String> player;
+
+    @FXML
+    private TableColumn<Game, Integer> steps;
+
+    @FXML
+    private TableColumn<Game, Integer> duration;
+
+    @FXML
+    private TableColumn<Game, Float> score;
+
+    @FXML
+    private TableColumn<Game, LocalDate> date;
+
+
+    List<Game> topTenHighscores;
 
     public void showMainMenu(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/launch.fxml"));
@@ -22,5 +54,36 @@ public class HighScoresController {
         stage.show();
         Logger.info("Clicked on Main Menu button");
     }
+
+    @FXML
+    void initialize(){
+        Jdbi jdbi = Jdbi.create("jdbc:h2:mem:test");
+        jdbi.installPlugin(new SqlObjectPlugin());
+
+        topTenHighscores = jdbi.withExtension(GameDao.class, dao -> {
+            dao.createTable();
+            dao.insert(Game.builder()
+                    .id(1)
+                    .date(LocalDate.now())
+                    .playerName("Abdul")
+                    .duration(13)
+                    .outcome(Game.Outcomes.GIVEN_UP)
+                    .steps(2)
+                    .playerScore(40)
+                    .build());
+            return dao.getTopTenGames();
+        });
+        observableResult.addAll(topTenHighscores);
+
+        player.setCellValueFactory(new PropertyValueFactory<>("playerName"));
+        steps.setCellValueFactory(new PropertyValueFactory<>("steps"));
+        duration.setCellValueFactory(new PropertyValueFactory<>("duration"));
+        date.setCellValueFactory(new PropertyValueFactory<>("date"));
+        score.setCellValueFactory(new PropertyValueFactory<>("playerScore"));
+
+        topTenTable.setItems(observableResult);
+    }
+
+    ObservableList<Game> observableResult = FXCollections.observableArrayList();
 
 }

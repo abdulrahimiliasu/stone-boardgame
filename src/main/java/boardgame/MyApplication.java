@@ -14,6 +14,7 @@ public class MyApplication extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/launch.fxml"));
         stage.setTitle("Stone Board Game");
         stage.setScene(new Scene(root));
+        stage.setResizable(false);
         stage.show();
     }
 }
