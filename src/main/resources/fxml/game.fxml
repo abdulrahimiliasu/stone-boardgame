@@ -34,7 +34,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-      <Label fx:id="playerNameLabel" layoutX="57.0" layoutY="21.0" prefHeight="17.0" prefWidth="579.0" text="Current User:">
+      <Label fx:id="playerNameLabel" layoutX="57.0" layoutY="21.0" prefHeight="17.0" prefWidth="579.0" text="Current Player:">
          <font>
             <Font size="15.0" />
          </font>
@@ -63,7 +63,7 @@
       </Label>
       <HBox layoutX="534.0" layoutY="603.0" prefHeight="26.0" prefWidth="133.0">
          <children>
-            <Button cancelButton="true" mnemonicParsing="false" onAction="#resetGame" text="Reset" />
+            <Button fx:id="resetButton" cancelButton="true" mnemonicParsing="false" onAction="#resetGame" text="Reset" />
             <Button fx:id="giveUpButton" mnemonicParsing="false" onAction="#showHighScores" text="Give Up">
                <HBox.margin>
                   <Insets left="20.0" />

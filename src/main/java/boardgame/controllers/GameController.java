@@ -64,6 +64,9 @@ public class GameController {
     private GridPane board;
 
     @FXML
+    private Button resetButton;
+
+    @FXML
     private Button giveUpButton;
 
     @FXML
@@ -85,7 +88,7 @@ public class GameController {
 
     public void initData(String name){
         this.playerName = name;
-        playerNameLabel.setText("Current User: " +this.playerName);
+        playerNameLabel.setText("Current Player: " +this.playerName);
     }
 
     private void createBoard(){
@@ -142,6 +145,7 @@ public class GameController {
                 if (selectablePositions.contains(position)) {
                     selectPosition(position);
                     alterSelectionPhase();
+                    resetButton.setDisable(true);
                 }
             }
             case SELECT_TO -> {
@@ -155,6 +159,7 @@ public class GameController {
                     Logger.debug("Stone moved to ({}, {}), Player Steps: {}", position.row(), position.col(), playerSteps);
                     if(model.isGameSolved()){Logger.debug("GAME SOLVED AT : {}", finishedTime);} else {playerSteps ++;}
                     playerStepsLabel.setText(String.valueOf(playerSteps));
+                    resetButton.setDisable(false);
                 }
             }
         }
@@ -169,7 +174,7 @@ public class GameController {
 
     void playerFinished(){
         playerSteps ++;
-        giveUpButton.setText("Save");
+        giveUpButton.setText("Finished");
         model.setGameIsSolved(true);
         gameIsSolvedLabel.setText("Hurray! You solved the game.");
         finishedTime = LocalTime.now();
