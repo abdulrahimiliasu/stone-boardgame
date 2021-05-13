@@ -32,7 +32,7 @@ public class LaunchController {
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.show();
-            Logger.info("Player name is set to {}, Loading Game.", playerNameTextfield.getText());
+            Logger.info("Player name is set to {}", playerNameTextfield.getText());
         }
 
     }

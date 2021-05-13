@@ -15,9 +15,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.core.statement.Slf4JSqlLogger;
+import org.jdbi.v3.postgres.PostgresPlugin;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.tinylog.Logger;
-
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -57,22 +58,18 @@ public class HighScoresController {
 
     @FXML
     void initialize(){
-        Jdbi jdbi = Jdbi.create("jdbc:h2:mem:test");
-        jdbi.installPlugin(new SqlObjectPlugin());
-
-        topTenHighscores = jdbi.withExtension(GameDao.class, dao -> {
-            dao.createTable();
-            dao.insert(Game.builder()
-                    .id(1)
-                    .date(LocalDate.now())
-                    .playerName("Abdul")
-                    .duration(13)
-                    .outcome(Game.Outcomes.GIVEN_UP)
-                    .steps(2)
-                    .playerScore(40)
-                    .build());
-            return dao.getTopTenGames();
-        });
+        Logger.debug("Accessing Database...");
+        Jdbi jdbi = Jdbi.create(
+                "jdbc:postgresql://queenie.db.elephantsql.com:5432/",
+                "teytjfip",
+                "cohPceXish-l2QtXpEXz2Ek7_Z0vcZjg"
+        )
+                .installPlugin(new SqlObjectPlugin())
+                .installPlugin(new PostgresPlugin())
+                .setSqlLogger(new Slf4JSqlLogger());
+        Logger.debug("Connection Established");
+        topTenHighscores = jdbi.withExtension(GameDao.class, GameDao::getTopTenGames);
+        Logger.debug("Data Retrieved Successfully");
         observableResult.addAll(topTenHighscores);
 
         player.setCellValueFactory(new PropertyValueFactory<>("playerName"));

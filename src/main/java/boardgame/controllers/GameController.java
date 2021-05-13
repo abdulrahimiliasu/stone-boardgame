@@ -1,9 +1,5 @@
 package boardgame.controllers;
 
-import boardgame.model.Game;
-import boardgame.model.GameDao;
-import boardgame.model.GameModel;
-import boardgame.model.Position;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,14 +16,21 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import boardgame.model.Game;
+import boardgame.model.GameModel;
+import boardgame.model.Position;
+import boardgame.model.GameDao;
+
 import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.core.statement.Slf4JSqlLogger;
+import org.jdbi.v3.postgres.PostgresPlugin;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.tinylog.Logger;
 
@@ -247,17 +250,7 @@ public class GameController {
             finishedTime = LocalTime.now();
             Logger.debug("GIVE UP AT : {}", finishedTime);
         }
-
-        Jdbi jdbi = Jdbi.create("jdbc:h2:mem:test");
-        jdbi.installPlugin(new SqlObjectPlugin());
-
-        List<Game> gameList = jdbi.withExtension(GameDao.class, dao -> {
-            dao.createTable();
-            dao.insert(getGame());
-            return dao.getTopTenGames();
-        });
-        gameList.forEach(System.out::println);
-
+        persistGameData();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/highscores.fxml"));
         Parent root = fxmlLoader.load();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -266,16 +259,26 @@ public class GameController {
         stage.show();
     }
 
-    private Game getGame(){
-        return Game.builder()
-                .id(0)
+    void persistGameData(){
+        Jdbi jdbi = Jdbi.create(
+                "jdbc:postgresql://queenie.db.elephantsql.com:5432/",
+                "teytjfip",
+                "cohPceXish-l2QtXpEXz2Ek7_Z0vcZjg"
+        )
+                .installPlugin(new SqlObjectPlugin())
+                .installPlugin(new PostgresPlugin())
+                .setSqlLogger(new Slf4JSqlLogger());
+        Logger.debug("Database Connection Established");
+        jdbi.useExtension(GameDao.class, dao -> dao.insert(
+         Game.builder()
                 .duration((int) startTime.until(finishedTime, ChronoUnit.SECONDS))
                 .playerName(playerName)
                 .date(date)
-                .playerScore(((float) playerSteps / (float) startTime.until(finishedTime, ChronoUnit.SECONDS)) * 100)
+                .playerScore(model.isGameSolved() ?((float) playerSteps / (float) startTime.until(finishedTime, ChronoUnit.SECONDS)) * 100: 0)
                 .steps(playerSteps)
                 .outcome(model.isGameSolved() ? Game.Outcomes.SOLVED : Game.Outcomes.GIVEN_UP)
-                .build();
+                .build()));
+        Logger.debug("Game was saved Successfully");
     }
 
 }

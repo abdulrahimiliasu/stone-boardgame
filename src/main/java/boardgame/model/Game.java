@@ -16,7 +16,6 @@ public class Game {
         SOLVED, GIVEN_UP
     }
 
-    private int id;
     private int duration;
     private LocalDate date;
     private String playerName;

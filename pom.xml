@@ -6,8 +6,7 @@
     <artifactId>stone-boardgame</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
-    <description>This is a board game,
-        Initially, a piece of stone is placed on the top left square of the board.
+    <description>This is a board game, Initially, a piece of stone is placed on the top left square of the board.
         The goal of the puzzle game is to move the stone to the bottom right square marked with the `*` symbol.
     </description>
     <developers>
@@ -28,12 +27,28 @@
         <exec.mainClass>boardgame.Main</exec.mainClass>
         <javafx.version>16</javafx.version>
         <junit.jupiter.version>5.7.1</junit.jupiter.version>
+        <jackson.version>2.12.2</jackson.version>
         <jacoco.version>0.8.7</jacoco.version>
         <surefire.version>3.0.0-M5</surefire.version>
         <jdbi.version>3.19.0</jdbi.version>
         <tinylog.version>2.2.1</tinylog.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc11</artifactId>
+            <version>12.2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jdbi</groupId>
+            <artifactId>jdbi</artifactId>
+            <version>2.73</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.20</version>
+        </dependency>
         <dependency>
             <groupId>org.jdbi</groupId>
             <artifactId>jdbi3-core</artifactId>
@@ -51,12 +66,6 @@
             <artifactId>lombok</artifactId>
             <version>1.18.20</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.200</version>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.tinylog</groupId>
@@ -93,6 +102,12 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jdbi</groupId>
+            <artifactId>jdbi3-postgres</artifactId>
+            <version>3.20.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
     <build>

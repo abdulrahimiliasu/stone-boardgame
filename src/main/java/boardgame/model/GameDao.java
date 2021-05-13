@@ -15,19 +15,19 @@ public interface GameDao {
 
     @SqlUpdate("""
         CREATE TABLE game (
-            id INTEGER PRIMARY KEY ,
-            duration INTEGER ,
-            date DATE ,
-            player_name VARCHAR ,
-            player_score FLOAT ,
-            moves INTEGER ,
-            outcome VARCHAR NOT NULL
+                              id SERIAL PRIMARY KEY,
+                              duration INTEGER ,
+                              date DATE ,
+                              player_name VARCHAR NOT NULL ,
+                              player_score FLOAT ,
+                              steps INTEGER NOT NULL,
+                              outcome VARCHAR NOT NULL
         )
         """
     )
     void createTable();
 
-    @SqlUpdate("INSERT INTO game VALUES (:id, :duration, :date, :playerName, :playerScore, :steps, :outcome)")
+    @SqlUpdate("INSERT INTO game(duration, date, player_name, player_score, steps, outcome) VALUES (:duration, :date, :playerName, :playerScore, :steps, :outcome)")
     int insert(@BindBean Game game);
 
     @SqlQuery("SELECT * FROM game WHERE id = :id")
@@ -36,7 +36,7 @@ public interface GameDao {
     @SqlUpdate("DELETE FROM game WHERE id = :id")
     void delete(@BindBean Game game);
 
-    @SqlQuery("SELECT * FROM game order by player_score ASC limit 10")
+    @SqlQuery("SELECT * FROM game ORDER BY player_score DESC limit 10")
     List<Game> getTopTenGames();
 
 }
