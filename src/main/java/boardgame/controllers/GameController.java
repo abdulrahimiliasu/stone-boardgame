@@ -1,5 +1,6 @@
 package boardgame.controllers;
 
+import boardgame.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,15 +24,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-import boardgame.model.Game;
-import boardgame.model.GameModel;
-import boardgame.model.Position;
-import boardgame.model.GameDao;
-
-import org.jdbi.v3.core.Jdbi;
-import org.jdbi.v3.core.statement.Slf4JSqlLogger;
-import org.jdbi.v3.postgres.PostgresPlugin;
-import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.tinylog.Logger;
 
 public class GameController {
@@ -255,35 +247,21 @@ public class GameController {
             finishedTime = LocalTime.now();
             Logger.debug("GIVE UP AT : {}", finishedTime);
         }
-        persistGameData();
+        Persistence.persistGame(
+                Game.builder()
+                        .duration((int) startTime.until(finishedTime, ChronoUnit.SECONDS))
+                        .playerName(playerName)
+                        .date(date)
+                        .playerScore(model.isGameSolved() ?((float) playerSteps / (float) startTime.until(finishedTime, ChronoUnit.SECONDS)) * 100: 0)
+                        .steps(playerSteps)
+                        .outcome(model.isGameSolved() ? Game.Outcomes.SOLVED : Game.Outcomes.GIVEN_UP)
+                        .build());
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/highscores.fxml"));
         Parent root = fxmlLoader.load();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.setResizable(false);
         stage.show();
-    }
-
-    void persistGameData(){
-        Jdbi jdbi = Jdbi.create(
-                "jdbc:postgresql://queenie.db.elephantsql.com:5432/",
-                "teytjfip",
-                "cohPceXish-l2QtXpEXz2Ek7_Z0vcZjg"
-        )
-                .installPlugin(new SqlObjectPlugin())
-                .installPlugin(new PostgresPlugin())
-                .setSqlLogger(new Slf4JSqlLogger());
-        Logger.debug("Database Connection Established");
-        jdbi.useExtension(GameDao.class, dao -> dao.insert(
-         Game.builder()
-                .duration((int) startTime.until(finishedTime, ChronoUnit.SECONDS))
-                .playerName(playerName)
-                .date(date)
-                .playerScore(model.isGameSolved() ?((float) playerSteps / (float) startTime.until(finishedTime, ChronoUnit.SECONDS)) * 100: 0)
-                .steps(playerSteps)
-                .outcome(model.isGameSolved() ? Game.Outcomes.SOLVED : Game.Outcomes.GIVEN_UP)
-                .build()));
-        Logger.debug("Game was saved Successfully");
     }
 
 }

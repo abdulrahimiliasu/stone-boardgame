@@ -8,20 +8,48 @@ The numbers in the squares specify the number of squares that the stone must ste
 However, when the stone lands on a framed square `[] (red square)`, it can be moved only diagonally, until it lands on an unframed square again. 
 When the stone lands on an unframed square again, it must be moved horizontally or vertically again.
 
-|  4  	    | 2      	| [2] 	    | 4   	    | 4 	    |  [3]   	| 4 	    | [3]   	|
-|:---:	    |-----	    |-----  	|-----	    |----	    |-----	    |---	    |-----	    |
-| **3**   	| **5** 	| **3**   	| **4**   	| **2** 	| **3**   	| **5** 	| **[2]** 	|
-| **4**   	| **3**   	| **2**   	| **[5]** 	| **2** 	| **2**   	| **5** 	| **2**   	|
-| **7**   	| **1**  	| **4**   	| **4**   	| **4** 	| **2**   	| **2** 	| **3**   	|
-| **[3]** 	| **2**   	| **2**   	| **4**   	| **2** 	| **5**   	| **2** 	| **5**   	|
-| **2**   	| **[3]** 	| **2**   	| **4**   	| **4** 	| **2**   	| **5** 	| **[1]** 	|
-| **6**   	| **2**   	| **2**   	| **[3]** 	| **2** 	| **5**   	| **6** 	| **3**   	|
-| **1**   	| **[2]** 	| **5**   	| **4**   	| **4** 	| **2**   	| **1** 	|     *     |
+```text
+        0     1     2     3    4    5    6    7
+     ╔═════╦═════╦═════╦═════╦═══╦═════╦═══╦═════╗
+  0  ║  4  ║ 2   ║ [2] ║ 4   ║ 4 ║ [3] ║ 4 ║ [3] ║
+     ╠═════╬═════╬═════╬═════╬═══╬═════╬═══╬═════╣
+  1  ║ 3   ║ 5   ║ 3   ║ 4   ║ 2 ║ 3   ║ 5 ║ [2] ║
+     ╠═════╬═════╬═════╬═════╬═══╬═════╬═══╬═════╣
+  2  ║ 4   ║ 3   ║ 2   ║ [5] ║ 2 ║ 2   ║ 5 ║ 2   ║
+     ╠═════╬═════╬═════╬═════╬═══╬═════╬═══╬═════╣
+  3  ║ 7   ║ 1   ║ 4   ║ 4   ║ 4 ║ 2   ║ 2 ║ 3   ║
+     ╠═════╬═════╬═════╬═════╬═══╬═════╬═══╬═════╣
+  4  ║ [3] ║ 2   ║ 2   ║ 4   ║ 2 ║ 5   ║ 2 ║ 5   ║
+     ╠═════╬═════╬═════╬═════╬═══╬═════╬═══╬═════╣
+  5  ║ 2   ║ [3] ║ 2   ║ 4   ║ 4 ║ 2   ║ 5 ║ [1] ║
+     ╠═════╬═════╬═════╬═════╬═══╬═════╬═══╬═════╣ 
+  6  ║ 6   ║ 2   ║ 2   ║ [3] ║ 2 ║ 5   ║ 6 ║ 3   ║
+     ╠═════╬═════╬═════╬═════╬═══╬═════╬═══╬═════╣
+  7  ║ 1   ║ [2] ║ 5   ║ 4   ║ 4 ║ 2   ║ 1 ║ *   ║
+     ╚═════╩═════╩═════╩═════╩═══╩═════╩═══╩═════╝
+```
 
-Starting Position = (0,0)\
-Goal Position = (7,7)
+Starting Position = **(0,0)**\
+Goal Position = **(7,7)**
 
+## Requirements
+Building the project requires JDK 11 or later and [Apache Maven](https://maven.apache.org/).
 ## Usage
 
 
-## Copyrights
+Created on Mac-OS , using Java 16.
+
+&nbsp;
+
+Run with the following commands, from the project's root directory:
+
+* mvn package
+
+* java -jar ./target/stone-boardgame-1.0.jar
+
+&nbsp;
+
+&nbsp;
+
+Developer:
+Illo Abdulrahim Iliyasu

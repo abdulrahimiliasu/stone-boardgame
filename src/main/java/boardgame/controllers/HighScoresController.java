@@ -2,6 +2,7 @@ package boardgame.controllers;
 
 import boardgame.model.Game;
 import boardgame.model.GameDao;
+import boardgame.model.Persistence;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,10 +15,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import org.jdbi.v3.core.Jdbi;
-import org.jdbi.v3.core.statement.Slf4JSqlLogger;
-import org.jdbi.v3.postgres.PostgresPlugin;
-import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.tinylog.Logger;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -54,24 +51,15 @@ public class HighScoresController {
         stage.setResizable(false);
         stage.show();
         Logger.info("Clicked on Main Menu button");
+        Logger.debug("Restarting Application");
     }
 
     @FXML
     void initialize(){
         Logger.debug("Accessing Database...");
-        Jdbi jdbi = Jdbi.create(
-                "jdbc:postgresql://queenie.db.elephantsql.com:5432/",
-                "teytjfip",
-                "cohPceXish-l2QtXpEXz2Ek7_Z0vcZjg"
-        )
-                .installPlugin(new SqlObjectPlugin())
-                .installPlugin(new PostgresPlugin())
-                .setSqlLogger(new Slf4JSqlLogger());
-        Logger.debug("Connection Established");
-        topTenHighscores = jdbi.withExtension(GameDao.class, GameDao::getTopTenGames);
+        topTenHighscores = Persistence.jdbi.withExtension(GameDao.class, GameDao::getTopTenGames);
         Logger.debug("Data Retrieved Successfully");
         observableResult.addAll(topTenHighscores);
-
         player.setCellValueFactory(new PropertyValueFactory<>("playerName"));
         steps.setCellValueFactory(new PropertyValueFactory<>("steps"));
         duration.setCellValueFactory(new PropertyValueFactory<>("duration"));
