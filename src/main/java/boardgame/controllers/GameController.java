@@ -1,7 +1,6 @@
 package boardgame.controllers;
 
-import boardgame.model.GameModel;
-import boardgame.model.Position;
+import boardgame.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,14 +17,22 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.io.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.tinylog.Logger;
 
 public class GameController {
 
     String playerName;
     private int playerSteps = 0;
+    LocalTime startTime;
+    LocalTime finishedTime;
+    LocalDate date = LocalDate.now();
 
     private enum SelectionPhase {
         SELECT_FROM,
@@ -49,6 +56,9 @@ public class GameController {
     private GridPane board;
 
     @FXML
+    private Button resetButton;
+
+    @FXML
     private Button giveUpButton;
 
     @FXML
@@ -64,11 +74,13 @@ public class GameController {
     void initialize(){
         createBoard();
         selectablePositions.add(startingPosition);
+        startTime = LocalTime.now();
+        Logger.debug("GAME STARTED AT : {}", startTime);
     }
 
     public void initData(String name){
         this.playerName = name;
-        playerNameLabel.setText("Current User: " +this.playerName);
+        playerNameLabel.setText("Current Player: " +this.playerName);
     }
 
     private void createBoard(){
@@ -115,6 +127,7 @@ public class GameController {
         var row = GridPane.getRowIndex(square);
         var col = GridPane.getColumnIndex(square);
         var position = new Position(row, col);
+        Logger.debug("Clicked on square ({}, {})", position.row(), position.col());
         handleClickOnSquare(position);
     }
 
@@ -124,23 +137,21 @@ public class GameController {
                 if (selectablePositions.contains(position)) {
                     selectPosition(position);
                     alterSelectionPhase();
+                    resetButton.setDisable(true);
                 }
             }
             case SELECT_TO -> {
                 if (selectablePositions.contains(position)) {
-                    if (model.isPlayerFinished(position)){
-                        giveUpButton.setText("Save");
-                        model.setGameIsSolved(true);
-                        gameIsSolvedLabel.setText("Hurray! You solved the game.");
-                    }
+                    if (model.isPlayerFinished(position)) {playerFinished();}
                     deselectSelectedPosition();
                     hideSelectablePositions();
                     selectionPhase = selectionPhase.alter();
                     addNewStoneAt(position);
                     clearAndAddSelectablePositionsAt(position);
-                    if(!model.isGameSolved())
-                        playerSteps ++;
+                    Logger.debug("Stone moved to ({}, {}), Player Steps: {}", position.row(), position.col(), playerSteps);
+                    if(model.isGameSolved()){Logger.debug("GAME SOLVED AT : {}", finishedTime);} else {playerSteps ++;}
                     playerStepsLabel.setText(String.valueOf(playerSteps));
+                    resetButton.setDisable(false);
                 }
             }
         }
@@ -151,6 +162,14 @@ public class GameController {
         hideSelectablePositions();
         setSelectablePositions();
         showSelectablePositions();
+    }
+
+    void playerFinished(){
+        playerSteps ++;
+        giveUpButton.setText("Finished");
+        model.setGameIsSolved(true);
+        gameIsSolvedLabel.setText("Hurray! You solved the game.");
+        finishedTime = LocalTime.now();
     }
 
     void clearAndAddSelectablePositionsAt(Position position){
@@ -203,6 +222,7 @@ public class GameController {
                 return (StackPane) child;
             }
         }
+        Logger.error("Cannot get square on board (Square out of range)");
         throw new AssertionError();
     }
 
@@ -213,6 +233,7 @@ public class GameController {
         resetTextLabels();
         model.setGameIsSolved(false);
         playerSteps = 0;
+        Logger.debug("GAME RESET");
     }
 
     void resetTextLabels(){
@@ -222,9 +243,19 @@ public class GameController {
     }
 
     public void showHighScores(ActionEvent actionEvent) throws IOException {
-        if (model.isGameSolved()){
-            System.out.println("Saving Data");
+        if (model.isGameSolved()){ Logger.debug("Saving Player Data"); } else {
+            finishedTime = LocalTime.now();
+            Logger.debug("GIVE UP AT : {}", finishedTime);
         }
+        Persistence.persistGame(
+                Game.builder()
+                        .duration((int) startTime.until(finishedTime, ChronoUnit.SECONDS))
+                        .playerName(playerName)
+                        .date(date)
+                        .playerScore(model.isGameSolved() ?((float) playerSteps / (float) startTime.until(finishedTime, ChronoUnit.SECONDS)) * 100: 0)
+                        .steps(playerSteps)
+                        .outcome(model.isGameSolved() ? Game.Outcomes.SOLVED : Game.Outcomes.GIVEN_UP)
+                        .build());
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/highscores.fxml"));
         Parent root = fxmlLoader.load();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

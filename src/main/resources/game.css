@@ -20,6 +20,14 @@
     -fx-border-width: 5;
 }
 
-.square:hover, .square-diagonal:hover {
-    -fx-background-color: ghostwhite;
+.square:hover {
+    -fx-background-color: rgba(201, 155, 155, 0.47);
+}
+
+.square-diagonal:hover{
+    -fx-background-color: rgba(239, 28, 28, 0.39);
+}
+
+.square-finish:hover{
+    -fx-background-color: rgba(173, 229, 129, 0.47);
 }

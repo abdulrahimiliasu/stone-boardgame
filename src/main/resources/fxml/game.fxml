@@ -27,43 +27,43 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="58.0" minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="58.0" minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-      <Label fx:id="playerNameLabel" layoutX="57.0" layoutY="21.0" prefHeight="17.0" prefWidth="579.0" text="Current User:">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <HBox alignment="BOTTOM_LEFT" layoutX="57.0" layoutY="605.0" prefHeight="23.0" prefWidth="87.0">
-         <children>
-            <Label text="Steps:">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="playerStepsLabel" prefHeight="23.0" prefWidth="33.0" text=" 0">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <HBox.margin>
-                  <Insets left="5.0" />
-               </HBox.margin>
-            </Label>
-         </children>
-      </HBox>
-      <Label fx:id="gameIsSolvedLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="219.0" layoutY="605.0" prefHeight="23.0" prefWidth="256.0" textAlignment="CENTER" textFill="#48925b">
+      <Label fx:id="playerNameLabel" layoutX="57.0" layoutY="21.0" prefHeight="17.0" prefWidth="579.0" text="Current Player:">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <HBox layoutX="553.0" layoutY="604.0" prefHeight="26.0" prefWidth="131.0">
+      <HBox alignment="BOTTOM_LEFT" layoutX="54.0" layoutY="605.0" prefHeight="23.0" prefWidth="92.0">
          <children>
-            <Button fx:id="resetButton" mnemonicParsing="false" onAction="#resetGame" text="Reset" />
+            <Label text="Steps:">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="playerStepsLabel" text=" 0">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+         </children>
+      </HBox>
+      <Label fx:id="gameIsSolvedLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="144.0" layoutY="606.0" prefHeight="20.0" prefWidth="368.0" textAlignment="CENTER" textFill="#079c1a">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <HBox layoutX="534.0" layoutY="603.0" prefHeight="26.0" prefWidth="133.0">
+         <children>
+            <Button fx:id="resetButton" cancelButton="true" mnemonicParsing="false" onAction="#resetGame" text="Reset" />
             <Button fx:id="giveUpButton" mnemonicParsing="false" onAction="#showHighScores" text="Give Up">
                <HBox.margin>
                   <Insets left="20.0" />
