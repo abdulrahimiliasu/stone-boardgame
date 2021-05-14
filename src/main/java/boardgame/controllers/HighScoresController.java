@@ -1,8 +1,8 @@
 package boardgame.controllers;
 
-import boardgame.model.Game;
-import boardgame.model.GameDao;
-import boardgame.model.Persistence;
+import boardgame.jdbi.Game;
+import boardgame.jdbi.GameDao;
+import boardgame.jdbi.Persistence;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -56,9 +56,9 @@ public class HighScoresController {
 
     @FXML
     void initialize(){
-        Logger.debug("Accessing Database...");
+        Logger.info("Accessing Database...");
         topTenHighscores = Persistence.jdbi.withExtension(GameDao.class, GameDao::getTopTenGames);
-        Logger.debug("Data Retrieved Successfully");
+        Logger.info("Data Retrieved Successfully");
         observableResult.addAll(topTenHighscores);
         player.setCellValueFactory(new PropertyValueFactory<>("playerName"));
         steps.setCellValueFactory(new PropertyValueFactory<>("steps"));

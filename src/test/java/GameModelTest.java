@@ -57,4 +57,24 @@ public class GameModelTest {
         assertEquals(model.getSelectablePositions(new Position(6,6),6),test4);
     }
 
+
+    @Test
+    void testIsPlayerFinished(){
+        assertFalse(model.isPlayerFinished(new Position(6,6)));
+        assertFalse(model.isPlayerFinished(new Position(4,4)));
+        assertFalse(model.isPlayerFinished(new Position(3,3)));
+        assertFalse(model.isPlayerFinished(new Position(4,4)));
+        assertFalse(model.isPlayerFinished(new Position(5,5)));
+        assertFalse(model.isPlayerFinished(new Position(1,1)));
+        assertFalse(model.isPlayerFinished(new Position(2,2)));
+        assertFalse(model.isPlayerFinished(new Position(0,0)));
+        assertTrue(model.isPlayerFinished(new Position(7,7)));
+    }
+
+    @Test
+    void testIsGameSolved(){
+        assertFalse(model.isGameSolved());
+        model.setGameIsSolved(true);
+        assertTrue(model.isGameSolved());
+    }
 }

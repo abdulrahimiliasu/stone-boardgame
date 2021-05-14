@@ -1,4 +1,4 @@
-package boardgame.model;
+package boardgame.jdbi;
 
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;

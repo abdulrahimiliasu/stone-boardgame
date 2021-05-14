@@ -1,4 +1,4 @@
-package boardgame.model;
+package boardgame.jdbi;
 
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;

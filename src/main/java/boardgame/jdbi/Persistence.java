@@ -1,4 +1,4 @@
-package boardgame.model;
+package boardgame.jdbi;
 
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.statement.Slf4JSqlLogger;
@@ -20,7 +20,7 @@ public class Persistence {
     public static void persistGame(Game game){
         Logger.debug("Database Connection Established");
         jdbi.withExtension(GameDao.class, dao -> dao.insert(game));
-        Logger.debug("Game was saved Successfully");
+        Logger.info("Game was saved Successfully");
     }
 
 }
