@@ -65,6 +65,7 @@ public class HighScoresController {
     @FXML
     void initialize(){
         Logger.info("Accessing Database...");
+        try { Class.forName("org.postgresql.Driver"); }catch (ClassNotFoundException e){ e.printStackTrace(); }
         topTenHighscores = Persistence.jdbi.withExtension(GameDao.class, GameDao::getTopTenGames);
         Logger.info("Data Retrieved Successfully");
         observableResult.addAll(topTenHighscores);

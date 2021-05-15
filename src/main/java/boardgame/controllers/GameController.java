@@ -20,6 +20,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -38,6 +39,7 @@ public class GameController {
     LocalTime startTime;
     LocalTime finishedTime;
     LocalDate date = LocalDate.now();
+    DecimalFormat formatter = new DecimalFormat("0.00");
 
     private enum SelectionPhase {
         SELECT_FROM,
@@ -265,12 +267,15 @@ public class GameController {
             finishedTime = LocalTime.now();
             Logger.debug("GIVE UP AT : {}", finishedTime);
         }
+        float score = (float) playerSteps / (float) startTime.until(finishedTime, ChronoUnit.SECONDS) * 100;
+        score = Float.parseFloat(formatter.format(score));
+        float no_score = Float.parseFloat(formatter.format(0));
         Persistence.persistGame(
                 Game.builder()
                         .duration((int) startTime.until(finishedTime, ChronoUnit.SECONDS))
                         .playerName(playerName)
                         .date(date)
-                        .playerScore(model.isGameSolved() ?((float) playerSteps / (float) startTime.until(finishedTime, ChronoUnit.SECONDS)) * 100: 0)
+                        .playerScore(model.isGameSolved() ? score:no_score)
                         .steps(playerSteps)
                         .outcome(model.isGameSolved() ? Game.Outcomes.SOLVED : Game.Outcomes.GIVEN_UP)
                         .build());

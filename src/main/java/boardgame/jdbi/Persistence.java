@@ -10,7 +10,6 @@ import org.tinylog.Logger;
  * Class for Persisting Game result into a database.
  */
 public class Persistence {
-
     /**
      * {@see org.jdbi.v3.core.Jdbi} instance for establishing connection to a remote SQL database.
      */
@@ -29,6 +28,7 @@ public class Persistence {
      * @param game {@link Game} instance to be persisted into the database.
      */
     public static void persistGame(Game game){
+        try { Class.forName("org.postgresql.Driver"); }catch (ClassNotFoundException e){ e.printStackTrace(); }
         Logger.debug("Database Connection Established");
         jdbi.withExtension(GameDao.class, dao -> dao.insert(game));
         Logger.info("Game was saved Successfully");
