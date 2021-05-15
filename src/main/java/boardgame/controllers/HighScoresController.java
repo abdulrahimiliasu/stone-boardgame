@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Class for controlling the HighScore table.
+ */
 public class HighScoresController {
 
     @FXML
@@ -43,6 +46,11 @@ public class HighScoresController {
 
     List<Game> topTenHighscores;
 
+    /**
+     * Shows the main menu of the application upon an action event.
+     *
+     * @param actionEvent event that triggers the action.
+     */
     public void showMainMenu(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/launch.fxml"));
         Parent root = fxmlLoader.load();

@@ -9,7 +9,16 @@ import org.tinylog.Logger;
 
 import java.io.IOException;
 
+/**
+ * Class for representing the entry point of the Application.
+ */
 public class StoneBoardGameApplication extends Application {
+
+    /**
+     * Starts the Application.
+     *
+     * @param primaryStage the primary stage of the JavaFX Application.
+     */
     @Override
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/launch.fxml"));

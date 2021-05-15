@@ -28,6 +28,9 @@ import java.util.List;
 
 import org.tinylog.Logger;
 
+/**
+ * Class for controlling the game.
+ */
 public class GameController {
 
     String playerName;
@@ -40,7 +43,7 @@ public class GameController {
         SELECT_FROM,
         SELECT_TO;
 
-        public SelectionPhase alter() {
+        private SelectionPhase alter() {
             return switch (this) {
                 case SELECT_FROM -> SELECT_TO;
                 case SELECT_TO -> SELECT_FROM;
@@ -80,7 +83,12 @@ public class GameController {
         Logger.debug("GAME STARTED AT : {}", startTime);
     }
 
-    public void initData(String name){
+    /**
+     * Sets the player name.
+     *
+     * @param name name of the player.
+     */
+    public void setPlayerName(String name){
         this.playerName = name;
         playerNameLabel.setText("Current Player: " +this.playerName);
     }
@@ -166,7 +174,7 @@ public class GameController {
         showSelectablePositions();
     }
 
-    void playerFinished(){
+    private void playerFinished(){
         playerSteps ++;
         giveUpButton.setText("Finished");
         model.setGameIsSolved(true);
@@ -174,7 +182,7 @@ public class GameController {
         finishedTime = LocalTime.now();
     }
 
-    void clearAndAddSelectablePositionsAt(Position position){
+    private void clearAndAddSelectablePositionsAt(Position position){
         selectablePositions.clear();
         selectablePositions.add(position);
     }
@@ -228,6 +236,9 @@ public class GameController {
         throw new AssertionError();
     }
 
+    /**
+     * Resets the game back to starting position.
+     */
     public void resetGame(){
         removeStone();
         clearAndAddSelectablePositionsAt(startingPosition);
@@ -238,12 +249,17 @@ public class GameController {
         Logger.info("GAME RESET");
     }
 
-    void resetTextLabels(){
+    private void resetTextLabels(){
         giveUpButton.setText("Give Up");
         gameIsSolvedLabel.setText("");
         playerStepsLabel.setText("0");
     }
 
+    /**
+     * Shows the HighScore table upon an {@link ActionEvent}.
+     *
+     * @param actionEvent event that triggers the action.
+     */
     public void showHighScores(ActionEvent actionEvent) throws IOException {
         if (model.isGameSolved()){ Logger.info("Saving Player Data"); } else {
             finishedTime = LocalTime.now();

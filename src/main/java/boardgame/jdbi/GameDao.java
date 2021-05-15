@@ -16,6 +16,7 @@ public interface GameDao {
     /**
      * Inserts {@link Game} instance into the database.
      *
+     * @param game {@link Game} instance to be inserted.
      * @return {@code 1} if insertion was successful, {@code 0} if there was an error.
      */
     @SqlUpdate("INSERT INTO game(duration, date, player_name, player_score, steps, outcome) VALUES (:duration, :date, :playerName, :playerScore, :steps, :outcome)")

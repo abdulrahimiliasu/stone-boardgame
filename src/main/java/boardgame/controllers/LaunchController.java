@@ -13,6 +13,9 @@ import java.io.IOException;
 
 import org.tinylog.Logger;
 
+/**
+ * Class for controlling launch of the application.
+ */
 public class LaunchController {
 
     @FXML
@@ -21,13 +24,18 @@ public class LaunchController {
     @FXML
     private Label errorLabel;
 
+    /**
+     * Starts the game upon an action event.
+     *
+     * @param actionEvent event that triggers the actions.
+     */
     public void startGame(ActionEvent actionEvent) throws IOException {
         if (playerNameTextfield.getText().isEmpty()) {
             errorLabel.setText("*player name cannot be empty!");
         } else {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/game.fxml"));
             Parent root = fxmlLoader.load();
-            fxmlLoader.<GameController>getController().initData(playerNameTextfield.getText());
+            fxmlLoader.<GameController>getController().setPlayerName(playerNameTextfield.getText());
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setResizable(false);

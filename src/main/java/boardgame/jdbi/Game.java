@@ -19,7 +19,14 @@ public class Game {
      * Enum representing the available game outcomes.
      */
     public enum Outcomes{
-        SOLVED, GIVEN_UP
+        /**
+         * The game was solved by the player.
+         */
+        SOLVED,
+        /**
+         * The player was not solved by the player.
+         */
+        GIVEN_UP
     }
 
     /**
@@ -28,7 +35,7 @@ public class Game {
     private int duration;
 
     /**
-     * The date the game was played
+     * The date the game was played.
      */
     private LocalDate date;
 
@@ -48,7 +55,7 @@ public class Game {
     private int steps;
 
     /**
-     * Indicates whether the player has solved the puzzle.
+     * Indicates whether the player has solved the game.
      */
     private Outcomes outcome;
 }

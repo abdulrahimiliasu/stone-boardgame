@@ -41,7 +41,7 @@ Created on Mac-OS , using Java 16.
 
 &nbsp;
 
-Run with the following commands, from the project's root directory:
+Install [PostgreSQL Driver](https://jdbc.postgresql.org) and Run with the following commands, from the project's root directory:
 
 * mvn package
 
