@@ -1,5 +1,7 @@
 package boardgame.controllers;
 
+import boardgame.jdbi.Game;
+import boardgame.jdbi.Persistence;
 import boardgame.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -233,7 +235,7 @@ public class GameController {
         resetTextLabels();
         model.setGameIsSolved(false);
         playerSteps = 0;
-        Logger.debug("GAME RESET");
+        Logger.info("GAME RESET");
     }
 
     void resetTextLabels(){
@@ -243,7 +245,7 @@ public class GameController {
     }
 
     public void showHighScores(ActionEvent actionEvent) throws IOException {
-        if (model.isGameSolved()){ Logger.debug("Saving Player Data"); } else {
+        if (model.isGameSolved()){ Logger.info("Saving Player Data"); } else {
             finishedTime = LocalTime.now();
             Logger.debug("GIVE UP AT : {}", finishedTime);
         }
