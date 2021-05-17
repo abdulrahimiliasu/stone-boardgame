@@ -128,7 +128,7 @@ public class GameController {
     }
 
     private Circle createStone(){
-        Circle stone = new Circle(10);
+        Circle stone = new Circle(15);
         stone.setFill(Color.rgb(0,0,0));
         return stone;
     }
