@@ -51,15 +51,15 @@ public class HighScoresController {
      *
      * @param actionEvent event that triggers the action.
      */
-    public void showMainMenu(ActionEvent actionEvent) throws IOException {
+    public void restartGame(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/launch.fxml"));
         Parent root = fxmlLoader.load();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.setResizable(false);
         stage.show();
-        Logger.info("Clicked on Main Menu button");
-        Logger.debug("Restarting Application");
+        Logger.info("Restart Button Pressed");
+        Logger.debug("Restarting Application...");
     }
 
     @FXML

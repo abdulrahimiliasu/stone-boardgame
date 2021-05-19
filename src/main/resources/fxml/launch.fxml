@@ -6,15 +6,15 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boardgame.controllers.LaunchController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="body" stylesheets="@../game.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boardgame.controllers.LaunchController">
    <children>
-      <Label fx:id="errorLabel" layoutX="182.0" layoutY="192.0" prefHeight="17.0" prefWidth="238.0" textFill="#e90c0c" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="72.0" layoutY="87.0" prefHeight="72.0" prefWidth="457.0" text="Stone Board Game" textAlignment="CENTER" textFill="#ad7676">
+      <Label fx:id="errorLabel" layoutX="169.0" layoutY="192.0" prefHeight="17.0" prefWidth="263.0" textFill="WHITE" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="72.0" layoutY="87.0" prefHeight="72.0" prefWidth="457.0" style="-fx-effect: dropshadow( three-pass-box , rgba(0, 0, 0, 0.2) , 15, 0.0 , 0 , 3 )dropshadow( three-pass-box , rgba(0, 0, 0, 0.2) , 10, 0.0 , 0 , 2);" text="Stone Board Game" textAlignment="CENTER" textFill="WHITE">
          <font>
-            <Font size="50.0" />
+            <Font name="Helvetica Neue" size="50.0" />
          </font>
       </Label>
-      <Button fx:id="startButton" layoutX="234.0" layoutY="291.0" mnemonicParsing="false" onAction="#startGame" prefHeight="56.0" prefWidth="135.0" text="Start" />
-      <TextField fx:id="playerNameTextfield" layoutX="182.0" layoutY="219.0" prefHeight="26.0" prefWidth="238.0" promptText="Enter a player name" />
+      <Button fx:id="startButton" defaultButton="true" layoutX="234.0" layoutY="291.0" mnemonicParsing="false" onAction="#startGame" prefHeight="56.0" prefWidth="135.0" text="Start" />
+      <TextField fx:id="playerNameTextfield" layoutX="169.0" layoutY="219.0" prefHeight="37.0" prefWidth="263.0" promptText="Enter a player name" styleClass="textfield" />
    </children>
 </Pane>

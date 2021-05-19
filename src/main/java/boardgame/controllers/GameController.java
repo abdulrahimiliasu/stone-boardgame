@@ -128,7 +128,7 @@ public class GameController {
     }
 
     private Circle createStone(){
-        Circle stone = new Circle(15);
+        Circle stone = new Circle(10);
         stone.setFill(Color.rgb(0,0,0));
         return stone;
     }
@@ -160,8 +160,8 @@ public class GameController {
                     selectionPhase = selectionPhase.alter();
                     addNewStoneAt(position);
                     clearAndAddSelectablePositionsAt(position);
-                    Logger.debug("Stone moved to ({}, {}), Player Steps: {}", position.row(), position.col(), playerSteps);
                     if(model.isGameSolved()){Logger.debug("GAME SOLVED AT : {}", finishedTime);} else {playerSteps ++;}
+                    Logger.debug("Stone moved to ({}, {}), Player Steps: {}", position.row(), position.col(), playerSteps);
                     playerStepsLabel.setText(String.valueOf(playerSteps));
                     resetButton.setDisable(false);
                 }

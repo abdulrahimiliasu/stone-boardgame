@@ -1,33 +1,91 @@
+.body{
+    -fx-background-color: radial-gradient(focus-angle 90deg, focus-distance 50%, center 50% 50%, radius 500px, #ffcda5,#ee4d5f);
+}
+
+.body-game{
+    -fx-background-color: radial-gradient(focus-angle 90deg, focus-distance 50%, center 50% 50%, radius 500px, #ffcda5, #ffffff);
+}
+
 .square {
     -fx-border-style: solid;
+    -fx-background-color: white;
+    -fx-effect: dropshadow( three-pass-box , rgba(0, 0, 0, 0.2) , 15, 0.0 , 0 , 3 );
 }
 .square-diagonal {
-    -fx-border-color: red;
+    -fx-border-color: #d50000;
+    -fx-background-color: #FFAB91;
+    -fx-effect: dropshadow( three-pass-box , rgba(0, 0, 0, 0.2) , 15, 0.0 , 0 , 3 );
 }
 .square-finish {
     -fx-border-color: green;
+    -fx-background-color: #8BC34A;
 }
 
 .selected {
-    -fx-background-color: silver;
-}
-
-.square-diagonal, .square-finish{
-    -fx-border-width: 2;
+    -fx-background-color: #D7CCC8;
+    -fx-effect: dropshadow( three-pass-box , rgba(0, 0, 0, 0) , 0, 0.0 , 0 , 0 );
 }
 
 .selectable {
     -fx-border-width: 5;
+    -fx-background-color: white;
 }
 
 .square:hover {
-    -fx-background-color: rgba(201, 155, 155, 0.47);
+    -fx-background-color: #D7CCC8;
 }
 
 .square-diagonal:hover{
-    -fx-background-color: rgba(239, 28, 28, 0.39);
+    -fx-background-color: #FF5722;
 }
 
 .square-finish:hover{
-    -fx-background-color: rgba(173, 229, 129, 0.47);
+    -fx-background-color: #4CAF50;
+}
+
+.table{
+    -fx-background-color: rgba(128, 128, 128, 0.16);
+}
+
+.button {
+    -fx-text-fill: white;
+    -fx-padding: 8 15 15 15;
+    -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;
+    -fx-background-radius: 8;
+    -fx-background-color:
+            linear-gradient(from 0% 93% to 0% 100%, #a34313 0%, #903b12 100%),
+            #9d4024,
+            #d86e3a,
+            radial-gradient(center 50% 50%, radius 100%, #d86e3a, #c54e2c);
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.75) , 4,0,0,1 );
+    -fx-font-weight: bold;
+    -fx-font-size: 1.1em;
+}
+
+.button:hover {
+    -fx-background-color:
+            linear-gradient(from 0% 93% to 0% 100%, #a34313 0%, #903b12 100%),
+            #9d4024,
+            #d86e3a,
+            radial-gradient(center 50% 50%, radius 100%, #ea7f4b, #c54e2c);
+
+}
+
+.button:armed{
+    -fx-padding: 10 15 13 15;
+    -fx-background-insets: 2 0 0 0,2 0 3 0, 2 0 4 0, 2 0 5 0;
+}
+
+.button Text{
+    -fx-fill: white;
+    -fx-effect: dropshadow( gaussian , #a30000 , 0,0,0,2 );
+}
+
+.textfield{
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-effect: dropshadow( three-pass-box , rgba(0, 0, 0, 0.2) , 30, 0.0 , 0 , 5 );
+}
+.textfield:focused{
+    -fx-effect: dropshadow( three-pass-box , rgba(0, 0, 0, 0.2) , 30, 0.0 , 0 , 20 );
 }
