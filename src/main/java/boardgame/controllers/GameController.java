@@ -59,6 +59,9 @@ public class GameController {
     GameModel model = new GameModel();
     Position startingPosition = new Position(0,0);
 
+    private final Player redPlayer = new Player(this.model.getRedPlayerStartingPositions(), PlayerColor.RED);
+    private final Player bluePlayer = new Player(this.model.getBluePlayerStartingPositions(), PlayerColor.BLUE);
+
     @FXML
     private GridPane board;
 
@@ -80,16 +83,11 @@ public class GameController {
     @FXML
     void initialize(){
         createBoard();
-        selectablePositions.add(startingPosition);
+        selectablePositions.addAll(model.getStonesStartingPositions());
         startTime = LocalTime.now();
         Logger.debug("GAME STARTED AT : {}", startTime);
     }
 
-    /**
-     * Sets the player name.
-     *
-     * @param name name of the player.
-     */
     public void setPlayerName(String name){
         this.playerName = name;
         playerNameLabel.setText("Current Player: " +this.playerName);
@@ -99,25 +97,32 @@ public class GameController {
         for (int i = 0; i < board.getRowCount(); i++) {
             for (int j = 0; j < board.getColumnCount(); j++) {
                 StackPane square;
-                if (model.isDiagonalSquare(j,i)){ square = createSquare("square-diagonal"); }
-                else if(i == 7 && j == 7){ square = createSquare("square-finish"); }
-                else{ square = createSquare("square"); }
+                if (redPlayer.positions().contains(new Position(j,i))){
+                    square = createBoardSquare("square-red-position");
+                }
+                else if(bluePlayer.positions().contains(new Position(j,i))){
+                    square = createBoardSquare("square-blue-position");
+                }else{
+                    int squareAvailability = model.getSquareAvailability(new Position(j,i));
+                    boolean isSquareAvailable = squareAvailability != 0;
+                    square = isSquareAvailable ? createBoardSquare("square"): createBoardSquare("square-not-allowed");
+                }
                 board.add(square,i,j);
             }
         }
-        addNewStoneAt(startingPosition);
+        redPlayer.positions().forEach(position -> addStoneAt(position,redPlayer.color()));
+        bluePlayer.positions().forEach(position -> addStoneAt(position,PlayerColor.BLUE));
     }
 
-    private StackPane createSquare(String cssClass) {
+    private StackPane createBoardSquare(String cssClass) {
         var square = new StackPane();
         square.getStyleClass().add(cssClass);
         square.setOnMouseClicked(this::handleMouseClick);
         return square;
     }
 
-    private void addNewStoneAt(Position position){
-        removeStone();
-        var newStone = createStone();
+    private void addStoneAt(Position position, PlayerColor colorCode){
+        var newStone = createStone(colorCode);
         GridPane.setHalignment(newStone, HPos.CENTER);
         GridPane.setValignment(newStone, VPos.CENTER);
         board.add(newStone,position.col(),position.row());
@@ -127,9 +132,10 @@ public class GameController {
         board.getChildren().removeIf(child -> child instanceof Circle);
     }
 
-    private Circle createStone(){
+    private Circle createStone(PlayerColor colorCode){
         Circle stone = new Circle(10);
-        stone.setFill(Color.rgb(0,0,0));
+        Color color = colorCode == PlayerColor.RED ? PlayerColor.RED.getColorCode() : PlayerColor.BLUE.getColorCode();
+        stone.setFill(color);
         return stone;
     }
 
@@ -146,6 +152,8 @@ public class GameController {
     private void handleClickOnSquare(Position position) {
         switch (selectionPhase) {
             case SELECT_FROM -> {
+                if (isStoneNotMovable(position)) return; // Stone has no movable positions
+
                 if (selectablePositions.contains(position)) {
                     selectPosition(position);
                     alterSelectionPhase();
@@ -155,10 +163,10 @@ public class GameController {
             case SELECT_TO -> {
                 if (selectablePositions.contains(position)) {
                     if (model.isPlayerFinished(position)) {playerFinished();}
+                    updatePlayerPositions(selected, position);
                     deselectSelectedPosition();
                     hideSelectablePositions();
                     selectionPhase = selectionPhase.alter();
-                    addNewStoneAt(position);
                     clearAndAddSelectablePositionsAt(position);
                     if(model.isGameSolved()){Logger.debug("GAME SOLVED AT : {}", finishedTime);} else {playerSteps ++;}
                     Logger.debug("Stone moved to ({}, {}), Player Steps: {}", position.row(), position.col(), playerSteps);
@@ -167,6 +175,26 @@ public class GameController {
                 }
             }
         }
+    }
+
+    boolean isStoneNotMovable(Position position){
+        List<Position> movablePositions = model.getSelectablePositions(position);
+        movablePositions.removeAll(redPlayer.positions());
+        movablePositions.removeAll(bluePlayer.positions());
+        return movablePositions.isEmpty();
+    }
+
+    void updatePlayerPositions(Position selectedPosition, Position newPosition) {
+        if (redPlayer.positions().contains(selectedPosition)) {
+            redPlayer.positions().remove(selectedPosition);
+            redPlayer.positions().add(newPosition);
+        }else {
+            bluePlayer.positions().remove(selectedPosition);
+            bluePlayer.positions().add(newPosition);
+        }
+        removeStone();
+        redPlayer.positions().forEach(position -> addStoneAt(position,PlayerColor.RED));
+        bluePlayer.positions().forEach(position -> addStoneAt(position,PlayerColor.BLUE));
     }
 
     private void alterSelectionPhase() {
@@ -187,6 +215,8 @@ public class GameController {
     private void clearAndAddSelectablePositionsAt(Position position){
         selectablePositions.clear();
         selectablePositions.add(position);
+        selectablePositions.addAll(redPlayer.positions());
+        selectablePositions.addAll(bluePlayer.positions());
     }
 
     private void selectPosition(Position position) {
@@ -211,12 +241,15 @@ public class GameController {
 
     private void setSelectablePositions() {
         selectablePositions.clear();
-        selectablePositions.addAll(model.getSelectablePositions(selected,model.getSquareMovements(selected)));
+        selectablePositions.addAll(model.getSelectablePositions(selected));
+        selectablePositions.removeAll(redPlayer.positions());
+        selectablePositions.removeAll(bluePlayer.positions());
     }
 
     private void showSelectablePositions() {
         for (var selectablePosition : selectablePositions) {
             var square = getSquare(selectablePosition);
+            square.getChildren().removeAll();
             square.getStyleClass().add("selectable");
         }
     }
@@ -244,7 +277,8 @@ public class GameController {
     public void resetGame(){
         removeStone();
         clearAndAddSelectablePositionsAt(startingPosition);
-        addNewStoneAt(startingPosition);
+        model.getRedPlayerStartingPositions().forEach(position -> addStoneAt(position,redPlayer.color()));
+        model.getBluePlayerStartingPositions().forEach(position -> addStoneAt(position,PlayerColor.BLUE));
         resetTextLabels();
         model.setGameIsSolved(false);
         playerSteps = 0;
