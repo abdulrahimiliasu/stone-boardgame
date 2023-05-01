@@ -11,14 +11,20 @@
     -fx-background-color: white;
     -fx-effect: dropshadow( three-pass-box , rgba(0, 0, 0, 0.2) , 15, 0.0 , 0 , 3 );
 }
-.square-diagonal {
+
+.square-not-allowed {
+    -fx-border-style: solid;
+    -fx-background-color: grey;
+    -fx-effect: dropshadow( three-pass-box , rgba(0, 0, 0, 0.2) , 15, 0.0 , 0 , 3 );
+}
+.square-red-position {
     -fx-border-color: #d50000;
     -fx-background-color: #FFAB91;
     -fx-effect: dropshadow( three-pass-box , rgba(0, 0, 0, 0.2) , 15, 0.0 , 0 , 3 );
 }
-.square-finish {
-    -fx-border-color: green;
-    -fx-background-color: #8BC34A;
+.square-blue-position {
+    -fx-border-color: #1265ff;
+    -fx-background-color: #a6c2ff;
 }
 
 .selected {
